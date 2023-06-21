@@ -50,3 +50,38 @@ void push (Node** head, int data) {                             //добавле
         }
     }
 }
+
+void pop(Node** head, int data) {
+    if (*head == NULL) return;
+    
+    if ((*head)->data == data) {
+        if ((*head)->left == NULL && (*head)->right == NULL) {
+            *head = NULL;
+            return;
+        }
+        if ((*head)->left != NULL && (*head)->right == NULL) {
+            Node* delNode = *head;
+            *head = (*head)->left;
+            free(delNode);
+            return;
+        }
+        if ((*head)->right != NULL && (*head)->left == NULL) {
+            Node* delNode = *head;
+            *head = (*head)->right;
+            free(delNode);
+            return;
+        }
+        if ((*head)->left != NULL && (*head)->right != NULL) {
+            Node* delNode = *head;
+            *head = (*head)->right->left;
+            pop(&(*head)->right->left, (*head)->right->left->data);
+            free(delNode);
+            return;
+        }
+    }
+    
+    if (data < (*head)->data)
+        pop(&(*head)->left, data);
+    else
+        pop(&(*head)->right, data);
+}

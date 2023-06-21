@@ -97,7 +97,7 @@ void outputDepth (Node** head) {                                  //обход �
 }
 
 
-void outputWidth (Node** head) {                                   //обход в ширину
+void outputWidth (Node** head) {                                  //обход в ширину
     if (*head == NULL) return;
 
     Node** queue = malloc(sizeof(Node*) * 100);
@@ -110,4 +110,12 @@ void outputWidth (Node** head) {                                   //обход 
         if (current->right != NULL) queue[end++] = current->right;
     }
     free(queue);
+}
+
+void backOutput(Node** Head) {                                    //обратный обход
+    if (*Head == NULL) return;
+
+    backOutput(&(*Head)->left);
+    backOutput(&(*Head)->right);
+    printf("%d ", (*Head)->data);
 }

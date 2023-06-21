@@ -51,7 +51,7 @@ void push (Node** head, int data) {                             //добавле
     }
 }
 
-void pop(Node** head, int data) {
+void pop(Node** head, int data) {                               //удаление эелемента из бинарного дерева
     if (*head == NULL) return;
     
     if ((*head)->data == data) {
@@ -72,16 +72,42 @@ void pop(Node** head, int data) {
             return;
         }
         if ((*head)->left != NULL && (*head)->right != NULL) {
-            Node* delNode = *head;
-            *head = (*head)->right->left;
-            pop(&(*head)->right->left, (*head)->right->left->data);
-            free(delNode);
+            Node* temp = (*head)->right;
+            while (temp->left != NULL) {
+                temp = temp->left;
+            }
+            (*head)->data = temp->data;
+            pop(&(*head)->right, temp->data);
             return;
         }
     }
     
-    if (data < (*head)->data)
+    else if (data < (*head)->data)
         pop(&(*head)->left, data);
     else
         pop(&(*head)->right, data);
+}
+
+void outputDepth (Node** head) {                                  //обход в глубину
+    if (*head == NULL) return;
+    
+    printf("%d", (*head)->data);
+    outputDepth(&(*head)->left);
+    outputDepth(&(*head)->right);
+}
+
+
+void outputWidth (Node** head) {                                   //обход в ширину
+    if (*head == NULL) return;
+
+    Node** queue = malloc(sizeof(Node*) * 100);
+    int start = 0, end = 0;
+    queue[end++] = *head;
+    while (start != end) {
+        Node* current = queue[start++];
+        printf("%d ", current->data);
+        if (current->left != NULL) queue[end++] = current->left;
+        if (current->right != NULL) queue[end++] = current->right;
+    }
+    free(queue);
 }
